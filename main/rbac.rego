@@ -2,8 +2,6 @@ package main.rbac
 
 import future.keywords
 
-#     Role definitions...probably data? -->
-
 retreived_role_assignments(principal_id) := role_assignments if {
 	principal := data.principals[principal_id]
 	role_assignments := principal.role_assignments
