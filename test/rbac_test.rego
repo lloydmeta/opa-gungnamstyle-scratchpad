@@ -63,6 +63,24 @@ checks := [
 	},
 ]
 
+test_rbac_with_unrecognised_principal if {
+	test_input := {
+		"principal_id": "lolerskates",
+		"checks": checks,
+	}
+
+	results := rbac.check_results with input as test_input
+		with data.principals as example.principals
+
+	# This user has the role assignment to read all
+
+	every should_not_be_ok_result in results {
+		false == should_not_be_ok_result.ok
+	}
+	false == rbac.has_all_requested with input as test_input
+		with data.principals as example.principals
+}
+
 test_rbac_with_viewer_all_partial_success if {
 	test_input := {
 		"principal_id": "viewerall123",
