@@ -49,16 +49,18 @@ retreived_role(role_id) := role if {
 }
 
 # all: true
-role_assignment_scope_matches(assignment_scope, requested_resource_id) if {
+role_assignment_scope_matches(assignment_scope, requested_resource_instance) if {
 	assignment_scope.all == true
 }
 
 # specific resource ids
-role_assignment_scope_matches(assignment_scope, requested_resource_id) if {
+role_assignment_scope_matches(assignment_scope, requested_resource_instance) if {
+	not requested_resource_instance.all
 	some assignment_specific_id in assignment_scope.specific_ids
-	assignment_specific_id == requested_resource_id
+	assignment_specific_id == requested_resource_instance.id
 }
 
+# <-- Helper functions
 allowed_on(principal_id, resource_type, action, org_id, resource_id) if {
 	role_assignments := retreived_role_assignments(principal_id)
 	print("role_assignments ", role_assignments)
@@ -89,31 +91,24 @@ allowed_on(principal_id, resource_type, action, org_id, resource_id) if {
 	resource_action_action == action
 }
 
-authz_check(action, org_id, resource_type, resource_id) if {
+# Use if-else because `allowed_on` could result in no output
+authz_check(action, org_id, resource_type, resource_instance) if {
 	allowed_on(
 		input.principal_id,
 		resource_type,
 		action,
 		org_id,
-		resource_id,
+		resource_instance,
 	)
-}
+} else = false
 
-authz_check(action, org_id, resource_type, resource_id) := false if {
-	not allowed_on(
-		input.principal_id,
-		resource_type,
-		action,
-		org_id,
-		resource_id,
-	)
-}
+#     Helper functions -->
 
 check_results := [
 result |
 	some to_check in input.checks
 	print("to_check ", to_check)
-	authz_check_result := authz_check(to_check.action, to_check.organization_id, to_check.resource_type, to_check.resource_id)
+	authz_check_result := authz_check(to_check.action, to_check.organization_id, to_check.resource_type, to_check.instance)
 	print("authz_check_result ", authz_check_result)
 	result := {
 		"ok": authz_check_result,
