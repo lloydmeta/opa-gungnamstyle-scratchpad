@@ -1,6 +1,5 @@
 package test
 
-import data.example
 import data.main.rbac
 import future.keywords
 
@@ -70,7 +69,6 @@ test_rbac_with_unrecognised_principal if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	# This user has the role assignment to read all
 
@@ -78,7 +76,6 @@ test_rbac_with_unrecognised_principal if {
 		false == should_not_be_ok_result.ok
 	}
 	false == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_viewer_all_partial_success if {
@@ -88,7 +85,6 @@ test_rbac_with_viewer_all_partial_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	# This user has the role assignment to read all
 	every should_be_ok_result in array.slice(results, 0, 2) {
@@ -98,7 +94,6 @@ test_rbac_with_viewer_all_partial_success if {
 		false == should_not_be_ok_result.ok
 	}
 	false == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_viewer_all_full_success if {
@@ -107,13 +102,11 @@ test_rbac_with_viewer_all_full_success if {
 		"checks": array.slice(checks, 0, 2),
 	}
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	every result in results {
 		true == result.ok
 	}
 	true == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_viewer_specific_partial_success if {
@@ -123,7 +116,6 @@ test_rbac_with_viewer_specific_partial_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	# This user has the role assignment to read a specific thing, but no more
 	every should_be_ok_result in array.slice(results, 0, 0) {
@@ -134,7 +126,6 @@ test_rbac_with_viewer_specific_partial_success if {
 	}
 
 	false == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_viewer_specific_full_success if {
@@ -143,13 +134,11 @@ test_rbac_with_viewer_specific_full_success if {
 		"checks": array.slice(checks, 0, 0),
 	}
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	every result in results {
 		true == result.ok
 	}
 	true == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_editor_all_partial_success if {
@@ -159,7 +148,6 @@ test_rbac_with_editor_all_partial_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	# This user has the role assignment to read a specific thing, but no more
 	every should_be_ok_result in array.slice(results, 0, 5) {
@@ -170,7 +158,6 @@ test_rbac_with_editor_all_partial_success if {
 	}
 
 	false == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_editor_all_full_success if {
@@ -180,14 +167,12 @@ test_rbac_with_editor_all_full_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	every result in results {
 		true == result.ok
 	}
 
 	true == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_editor_specific_partial_success if {
@@ -197,13 +182,11 @@ test_rbac_with_editor_specific_partial_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	# This user has the role assignment to edit + read a specific thing, but no more
 	assert_specific_ok_indices({0, 3}, results)
 
 	false == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_editor_specific_full_success if {
@@ -219,12 +202,11 @@ test_rbac_with_editor_specific_full_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
+
 	every result in results {
 		true == result.ok
 	}
 	true == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_admin_all_full_success if {
@@ -234,14 +216,12 @@ test_rbac_with_admin_all_full_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	every should_be_ok_result in results {
 		true == should_be_ok_result.ok
 	}
 
 	true == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 test_rbac_with_specific_partial_success if {
@@ -251,7 +231,6 @@ test_rbac_with_specific_partial_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	# This user has the role assignment to admin a specific thing, but no more
 	assert_specific_ok_indices({0, 3, 6}, results)
@@ -269,14 +248,12 @@ test_rbac_with_specific_full_success if {
 	}
 
 	results := rbac.check_results with input as test_input
-		with data.principals as example.principals
 
 	every result in results {
 		true == result.ok
 	}
 
 	true == rbac.has_all_requested with input as test_input
-		with data.principals as example.principals
 }
 
 assert_specific_ok_indices(expected_ok_idx, results) if {

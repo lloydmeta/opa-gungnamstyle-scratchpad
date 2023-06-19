@@ -18,9 +18,11 @@ Then in the project root dir, run
 opa run -s .
 ```
 
+This will run an OPA server that uses data from `data.json` and policies in `main`.
+
 #### Running a query over REST API
 
 
 ```sh
-❯ curl "0.0.0.0:8181/v1/data/main/rbac/check_results?pretty=true&explain=true" -d @example/input1.json -H 'Content-Type: application/json'
+❯ curl "0.0.0.0:8181/v1/data/main/rbac/check_results?pretty=true" -d @example/viewerall_input.json
 ```

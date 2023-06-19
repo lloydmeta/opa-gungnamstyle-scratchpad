@@ -5,14 +5,12 @@ import future.keywords
 #     Role definitions...probably data? -->
 
 retreived_role_assignments(principal_id) := role_assignments if {
-	some principal in data.principals
-	principal.principal_id == principal_id
+	principal := data.principals[principal_id]
 	role_assignments := principal.role_assignments
 }
 
 retreived_role(role_id) := role if {
-	some role in roles
-	role.role_id == role_id
+	role := roles_by_id[role_id]
 }
 
 # all: true

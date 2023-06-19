@@ -1,5 +1,7 @@
 package main.rbac
 
+import future.keywords
+
 # <-- Role definitions, static for now...
 
 viewer_role := {
@@ -35,3 +37,9 @@ admin_role := {
 roles := [viewer_role, editor_role, admin_role]
 
 #     Role definitions, static for now... -->
+
+# Lookup hash
+roles_by_id := {role_id: role |
+	some role in roles
+	role_id := role.role_id
+}
