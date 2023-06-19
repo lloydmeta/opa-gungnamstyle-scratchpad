@@ -1,0 +1,79 @@
+{
+  "input": {
+    "principal_id": "viewerall123",
+    "checks": [
+      {
+        "action": "read",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "id": "es123"
+        }
+      },
+      {
+        "action": "read",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "id": "es456"
+        }
+      },
+      {
+        "action": "read",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "all": true
+        }
+      },
+      {
+        "action": "edit",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "id": "es123"
+        }
+      },
+      {
+        "action": "edit",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "id": "es456"
+        }
+      },
+      {
+        "action": "edit",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "all": true
+        }
+      },
+      {
+        "action": "create",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "id": "es123"
+        }
+      },
+      {
+        "action": "create",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "id": "es456"
+        }
+      },
+      {
+        "action": "create",
+        "organization_id": "org123",
+        "resource_type": "elasticsearch",
+        "instance": {
+          "all": true
+        }
+      }
+    ]
+  }
+}
