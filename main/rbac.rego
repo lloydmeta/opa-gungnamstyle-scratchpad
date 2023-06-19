@@ -30,24 +30,24 @@ role_assignment_scope_matches(assignment_scope, requested_resource_instance) if 
 # <-- Helper functions
 allowed_on(principal_id, resource_type, action, org_id, resource_id) if {
 	role_assignments := retreived_role_assignments(principal_id)
-	print("role_assignments ", role_assignments)
+	trace(sprintf("role_assignments [%v]", [role_assignments]))
 
 	some role_assignment in role_assignments
 
-	print("role_assignment ", role_assignment)
+	trace(sprintf("role_assignment [%v]", [role_assignment]))
 
 	role_assignment.organization_id == org_id
 
-	print("assignment_scope ", role_assignment.scope)
+	trace(sprintf("assignment_scope [%v]", [role_assignment.scope]))
 
 	scope_check_result := role_assignment_scope_matches(role_assignment.scope, resource_id)
 
-	print("scope_check_result ", scope_check_result)
+	trace(sprintf("scope_check_result [%v]", [scope_check_result]))
 	true == scope_check_result
 
 	role := retreived_role(role_assignment.role_id)
 
-	print("role ", role)
+	trace(sprintf("role [%v]", [role]))
 
 	some resource_action in role.resource_actions
 
@@ -74,9 +74,9 @@ authz_check(action, org_id, resource_type, resource_instance) if {
 check_results := [
 result |
 	some to_check in input.checks
-	print("to_check ", to_check)
+	trace(sprintf("to_check [%v]", [to_check]))
 	authz_check_result := authz_check(to_check.action, to_check.organization_id, to_check.resource_type, to_check.instance)
-	print("authz_check_result ", authz_check_result)
+	trace(sprintf("authz_check_result [%v]", [authz_check_result]))
 	result := {
 		"ok": authz_check_result,
 		"check": to_check,
