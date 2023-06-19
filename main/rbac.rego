@@ -115,3 +115,11 @@ result |
 		"check": to_check,
 	}
 ]
+
+default has_all_requested := false
+
+has_all_requested if {
+	every result in check_results {
+		result.ok
+	}
+}
