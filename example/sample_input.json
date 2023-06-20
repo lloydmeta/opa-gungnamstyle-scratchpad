@@ -1,6 +1,6 @@
 {
   "input": {
-    "principal_id": "viewerall123",
+    "jwt_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.eyJpYXQiOjE2ODcyNjU4MjgsImlzcyI6ImVsYXN0aWMtaWFtIiwicm9sZV9hc3NpZ25tZW50cyI6W3sib3JnYW5pemF0aW9uX2lkIjoib3JnMTIzIiwicm9sZV9pZCI6InZpZXdlciIsInNjb3BlIjp7ImFsbCI6dHJ1ZX19XSwic3ViIjoidmlld2VyYWxsMTIzIn0.oty2ccdXOiLwSRrb_i9HBY057X8hBmJRe2gAg0YphsmR5JqeDh8pOtN__Cxj66QlEjxMwKc18PUZ_etMqqpjL-YRvhlUAaJoyKh9AtCgjbAN2eET_2SAdyng9eHCpWnqd1G-vWbucuwiFq7UUgV7uNQnwEaoMH4tBU8V0t0emsgZlsBCdLbT5WI2qYAfA7VMjJMPDELVR5fjvv5G21LilHNBMNtO-aVHOniIyvyPrEbb1sLlHGhoQXhcCy3_TTBQsCqgH43YUwbyH1IIFX6yHAG6VQiJTVueD5YR_nqgvvo2AmMKQbsP0bRKROp_jPCQCrdAhJEkmUUQdp9J0BTNRQ",
     "checks": [
       {
         "action": "read",

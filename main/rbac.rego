@@ -1,11 +1,7 @@
 package main.rbac
 
+import data.main.authc
 import future.keywords
-
-retreived_role_assignments(principal_id) := role_assignments if {
-	principal := data.principals[principal_id]
-	role_assignments := principal.role_assignments
-}
 
 retreived_role(role_id) := role if {
 	role := roles_by_id[role_id]
@@ -24,8 +20,7 @@ role_assignment_scope_matches(assignment_scope, requested_resource_instance) if 
 }
 
 # <-- Helper functions
-allowed_on(principal_id, resource_type, action, org_id, resource_id) if {
-	role_assignments := retreived_role_assignments(principal_id)
+allowed_on(role_assignments, resource_type, action, org_id, resource_id) if {
 	trace(sprintf("role_assignments [%v]", [role_assignments]))
 
 	some role_assignment in role_assignments
@@ -56,8 +51,9 @@ allowed_on(principal_id, resource_type, action, org_id, resource_id) if {
 
 # Use if-else because `allowed_on` could result in no output
 authz_check(action, org_id, resource_type, resource_instance) if {
+	authenticated_jwt_claims := authc.authenticated_jwt_claims
 	allowed_on(
-		input.principal_id,
+		authenticated_jwt_claims.role_assignments,
 		resource_type,
 		action,
 		org_id,
