@@ -1,4 +1,4 @@
-## OPA Scratchpad
+## OPA Scratchpad [![Run OPA Tests](https://github.com/lloydmeta/opa-gungnamstyle-scratchpad/actions/workflows/ci.yml/badge.svg)](https://github.com/lloydmeta/opa-gungnamstyle-scratchpad/actions/workflows/ci.yml)
 
 Nothing to see here, just some guy experimenting with OPA for implementing RBAC
 

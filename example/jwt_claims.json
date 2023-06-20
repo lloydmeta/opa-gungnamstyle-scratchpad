@@ -2,6 +2,10 @@
   "sub": "viewerall123",
   "iss": "elastic-iam",
   "role_assignments": [
-
+    {
+      "role_id": "viewer",
+      "organization_id": "org123",
+      "scope": {"all": true}
+    }
   ]
 }
