@@ -5,6 +5,8 @@ import future.keywords
 
 # This is stored somewhere in real life and sent to the OPA agents
 
+jwk := crypto.x509.parse_rsa_private_key(data.jwt_private_key)
+
 checks := [
 	{
 		"action": "read",
@@ -62,9 +64,9 @@ checks := [
 	},
 ]
 
-test_rbac_with_unrecognised_principal if {
+test_rbac_with_unrecognised_token if {
 	test_input := {
-		"principal_id": "lolerskates",
+		"jwt_token": "lolerskates",
 		"checks": checks,
 	}
 
@@ -79,8 +81,21 @@ test_rbac_with_unrecognised_principal if {
 }
 
 test_rbac_with_viewer_all_partial_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "viewerall123",
+			"role_assignments": [{
+				"role_id": "viewer",
+				"organization_id": "org123",
+				"scope": {"all": true},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "viewerall123",
+		"jwt_token": token,
 		"checks": checks,
 	}
 
@@ -97,8 +112,21 @@ test_rbac_with_viewer_all_partial_success if {
 }
 
 test_rbac_with_viewer_all_full_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "viewerall123",
+			"role_assignments": [{
+				"role_id": "viewer",
+				"organization_id": "org123",
+				"scope": {"all": true},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "viewerall123",
+		"jwt_token": token,
 		"checks": array.slice(checks, 0, 2),
 	}
 	results := rbac.check_results with input as test_input
@@ -110,8 +138,24 @@ test_rbac_with_viewer_all_full_success if {
 }
 
 test_rbac_with_viewer_specific_partial_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "viewerspecific123",
+			"role_assignments": [{
+				"role_id": "viewer",
+				"organization_id": "org123",
+				"scope": {
+					"all": false,
+					"specific_ids": ["es123"],
+				},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "viewerspecific123",
+		"jwt_token": token,
 		"checks": checks,
 	}
 
@@ -129,8 +173,24 @@ test_rbac_with_viewer_specific_partial_success if {
 }
 
 test_rbac_with_viewer_specific_full_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "viewerspecific123",
+			"role_assignments": [{
+				"role_id": "viewer",
+				"organization_id": "org123",
+				"scope": {
+					"all": false,
+					"specific_ids": ["es123"],
+				},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "viewerspecific123",
+		"jwt_token": token,
 		"checks": array.slice(checks, 0, 0),
 	}
 	results := rbac.check_results with input as test_input
@@ -142,8 +202,21 @@ test_rbac_with_viewer_specific_full_success if {
 }
 
 test_rbac_with_editor_all_partial_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "editorall123",
+			"role_assignments": [{
+				"role_id": "editor",
+				"organization_id": "org123",
+				"scope": {"all": true},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "editorall123",
+		"jwt_token": token,
 		"checks": checks,
 	}
 
@@ -161,8 +234,21 @@ test_rbac_with_editor_all_partial_success if {
 }
 
 test_rbac_with_editor_all_full_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "editorall123",
+			"role_assignments": [{
+				"role_id": "editor",
+				"organization_id": "org123",
+				"scope": {"all": true},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "editorall123",
+		"jwt_token": token,
 		"checks": array.slice(checks, 0, 5),
 	}
 
@@ -176,8 +262,24 @@ test_rbac_with_editor_all_full_success if {
 }
 
 test_rbac_with_editor_specific_partial_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "editorspecific123",
+			"role_assignments": [{
+				"role_id": "editor",
+				"organization_id": "org123",
+				"scope": {
+					"all": false,
+					"specific_ids": ["es123"],
+				},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "editorspecific123",
+		"jwt_token": token,
 		"checks": checks,
 	}
 
@@ -196,8 +298,24 @@ test_rbac_with_editor_specific_full_success if {
 		idx in {0, 3}
 	]
 
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "editorspecific123",
+			"role_assignments": [{
+				"role_id": "editor",
+				"organization_id": "org123",
+				"scope": {
+					"all": false,
+					"specific_ids": ["es123"],
+				},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "editorspecific123",
+		"jwt_token": token,
 		"checks": should_be_successful_checks,
 	}
 
@@ -210,8 +328,21 @@ test_rbac_with_editor_specific_full_success if {
 }
 
 test_rbac_with_admin_all_full_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "adminall123",
+			"role_assignments": [{
+				"role_id": "admin",
+				"organization_id": "org123",
+				"scope": {"all": true},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "adminall123",
+		"jwt_token": token,
 		"checks": checks,
 	}
 
@@ -225,8 +356,24 @@ test_rbac_with_admin_all_full_success if {
 }
 
 test_rbac_with_specific_partial_success if {
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "adminspecific123",
+			"role_assignments": [{
+				"role_id": "admin",
+				"organization_id": "org123",
+				"scope": {
+					"all": false,
+					"specific_ids": ["es123"],
+				},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "adminspecific123",
+		"jwt_token": token,
 		"checks": checks,
 	}
 
@@ -242,8 +389,24 @@ test_rbac_with_specific_full_success if {
 		some idx, check in checks
 		idx in {0, 3, 6}
 	]
+	token := io.jwt.encode_sign(
+		{"alg": "RS256", "typ": "JWT"},
+		{
+			"iss": "elastic-iam",
+			"sub": "adminspecific123",
+			"role_assignments": [{
+				"role_id": "admin",
+				"organization_id": "org123",
+				"scope": {
+					"all": false,
+					"specific_ids": ["es123"],
+				},
+			}],
+		},
+		jwk,
+	)
 	test_input := {
-		"principal_id": "adminspecific123",
+		"jwt_token": token,
 		"checks": should_be_successful_checks,
 	}
 
