@@ -25,17 +25,39 @@ This will run an OPA server that uses data from `data.json` and policies in `mai
 This should work as-is using the hard-coded JWT signing certs, using the [REST API](https://www.openpolicyagent.org/docs/latest/rest-api/#execute-a-simple-query)
 
 ```sh
-❯ curl "0.0.0.0:8181/v1/data/main/rbac/check_results?pretty=true" -d @example/sample_input.json
+curl "0.0.0.0:8181/v1/data/main/rbac/check_results?pretty=true" -d @example/sample_input.json
 ```
 
-To create a new JWT, use [jwt-cli](https://github.com/mike-engel/jwt-cli) to generate one based on the example in `examples/jwt_claims/json` and the hard-coded private key:
+To create a new JWT where the role assignments are different (e.g. instead of a viewer assignment scoped to all deployments), modify `example/jwt_claims.json` to be:
+
+```json
+{
+  "sub": "viewerall123",
+  "iss": "elastic-iam",
+  "role_assignments": [
+    {
+      "role_id": "viewer",
+      "organization_id": "org123",
+      "scope": {
+        "specific_ids": [
+          "es123"
+        ]
+      }
+    }
+  ]
+}
+```
+
+Then, use [jwt-cli](https://github.com/mike-engel/jwt-cli) to generate a JWT signed with the hard-coded private key:
 
 ```sh
-❯ jwt encode --alg PS512 --secret @rsa2048_private.pem "$(cat example/jwt_claims.json)"
-eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.eyJpYXQiOjE2ODcyNjU4MjgsImlzcyI6ImVsYXN0aWMtaWFtIiwicm9sZV9hc3NpZ25tZW50cyI6W3sib3JnYW5pemF0aW9uX2lkIjoib3JnMTIzIiwicm9sZV9pZCI6InZpZXdlciIsInNjb3BlIjp7ImFsbCI6dHJ1ZX19XSwic3ViIjoidmlld2VyYWxsMTIzIn0.oty2ccdXOiLwSRrb_i9HBY057X8hBmJRe2gAg0YphsmR5JqeDh8pOtN__Cxj66QlEjxMwKc18PUZ_etMqqpjL-YRvhlUAaJoyKh9AtCgjbAN2eET_2SAdyng9eHCpWnqd1G-vWbucuwiFq7UUgV7uNQnwEaoMH4tBU8V0t0emsgZlsBCdLbT5WI2qYAfA7VMjJMPDELVR5fjvv5G21LilHNBMNtO-aVHOniIyvyPrEbb1sLlHGhoQXhcCy3_TTBQsCqgH43YUwbyH1IIFX6yHAG6VQiJTVueD5YR_nqgvvo2AmMKQbsP0bRKROp_jPCQCrdAhJEkmUUQdp9J0BTNRQ
+jwt encode --alg PS512 --secret @rsa2048_private.pem "$(cat example/jwt_claims.json)"
+
+# Output
+eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.eyJpYXQiOjE2ODc4NzM3ODUsImlzcyI6ImVsYXN0aWMtaWFtIiwicm9sZV9hc3NpZ25tZW50cyI6W3sib3JnYW5pemF0aW9uX2lkIjoib3JnMTIzIiwicm9sZV9pZCI6InZpZXdlciIsInNjb3BlIjp7InNwZWNpZmljX2lkcyI6WyJlczEyMyJdfX1dLCJzdWIiOiJ2aWV3ZXJhbGwxMjMifQ.ZK_x5iermcmIlPiK-evNo7wn4Xp4eEx54QZbjnIbFD5ehDPgto1_R9CawLQT4RQ7sPcx2Ql7iGrnv6vV5BukNRhUqNjY4Q_-wlPB2T3KWA6qQb4ELZ6-bGTAOqqIGD1J7vNi29M24Ow9Jb9YYwfedjR4td2HEpnWnzCqU97erUJAmHknt2PUFxtm1ybbe93B65Xpqk8SSyvaJlbG8utxEwpfYSe-ThHrHbCT1uJnTfzmYauJAIdxgk6Xvx3b-e6zhWraKqgpbn_LD2bRatQG_wol-zcT_r92fh-YlhSFlVDztndLdiJfttd8AOqDLRZE_zC21hkndNWuRjJIPo9-tQ
 ```
 
-Paste that output as `jwt_token` in `example/sample_input.json`, and re-try
+Paste that output as `jwt_token` in `example/sample_input.json`, and re-try the curl.
 
 
 
