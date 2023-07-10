@@ -1,6 +1,7 @@
 package main.rbac
 
 import data.main.authc
+import data.main.workspaces
 import future.keywords
 
 retreived_role(role_id) := role if {
@@ -17,6 +18,17 @@ role_assignment_scope_matches(assignment_scope, requested_resource_instance) if 
 	not requested_resource_instance.all
 	some assignment_specific_id in assignment_scope.specific_ids
 	assignment_specific_id == requested_resource_instance.id
+}
+
+# workspace scope check (expects "workspace_id" to be in the role assignment)
+role_assignment_scope_matches(assignment_scope, requested_resource_instance) if {
+	not requested_resource_instance.all # workspace role assignments can't be for "all", as of writing
+
+	assignment_scope_workspace_id := assignment_scope.workspace_id
+
+	workspace_set_for_requested_resource_instance := workspaces.resource_id_to_workspaces_set[requested_resource_instance.id]
+	trace(sprintf("workspace_set_for_requested_resource_instance [%v] assignment_scope_workspace_id [%v]", [workspace_set_for_requested_resource_instance, assignment_scope_workspace_id]))
+	assignment_scope_workspace_id in workspace_set_for_requested_resource_instance
 }
 
 # <-- Helper functions

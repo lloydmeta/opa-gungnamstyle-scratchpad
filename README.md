@@ -28,7 +28,7 @@ This should work as-is using the hard-coded JWT signing certs, using the [REST A
 curl "0.0.0.0:8181/v1/data/main/rbac/check_results?pretty=true" -d @example/sample_input.json
 ```
 
-To create a new JWT where the role assignments are different (e.g. instead of a viewer assignment scoped to all deployments), modify `example/jwt_claims.json` to be:
+To create a new JWT where the role assignments are different (e.g. instead of a viewer assignment scoped to all deployments, an admin, or workspace), modify `example/jwt_claims.json` to be:
 
 ```json
 {
@@ -59,9 +59,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.eyJpYXQiOjE2ODc4NzM3ODUsImlzcyI6ImVsYXN0aWM
 
 Paste that output as `jwt_token` in `example/sample_input.json`, and re-try the curl.
 
-
-
-### Misc. commands that help
+### Misc. Things that help
 
 #### (Re)generating keys
 
@@ -78,3 +76,29 @@ Install [jwt-cli](https://github.com/mike-engel/jwt-cli)
 ```sh
 jwt encode --alg PS512 --secret @rsa2048_private.pem "$(cat example/viewerall_jwt.json)" | jwt decode --alg PS512 --secret @rsa2048_public.pem -
 ```
+
+#### Different scenarios
+
+##### Workspace
+
+Tweak `data.json` to modify workspace definitions and restart the server (there's probably a way to do this using the API or bundle API)
+
+Update `jwt_claims.json` to be
+
+```json
+{
+  "sub": "viewerworkspace123",
+  "iss": "elastic-iam",
+  "role_assignments": [
+    {
+      "role_id": "viewer",
+      "organization_id": "org123",
+      "scope": {
+        "workspace_id": "workspace_123"
+      }
+    }
+  ]
+}
+```
+
+Generate the JWT, put it in `sample_input.json` and re-run the curl.
