@@ -10,8 +10,7 @@
     "workspace_123": {
       "organization_id": "org123",
       "resource_ids": [
-        "es123",
-        "es456"
+        "es123"
       ]
     }
   }
