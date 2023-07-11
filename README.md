@@ -75,7 +75,7 @@ openssl rsa -in rsa2048_private.pem -pubout -out rsa2048_public.pem
 Install [jwt-cli](https://github.com/mike-engel/jwt-cli)
 
 ```sh
-jwt encode --alg PS512 --secret @rsa2048_private.pem "$(cat example/viewerall_jwt.json)" | jwt decode --alg PS512 --secret @rsa2048_public.pem -
+jwt encode --alg PS512 --secret @rsa2048_private.pem "$(cat example/jwt_claims.json)" | jwt decode --alg PS512 --ignore-exp --secret @rsa2048_public.pem -
 ```
 
 #### Different scenarios
