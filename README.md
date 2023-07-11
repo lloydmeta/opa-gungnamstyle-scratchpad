@@ -15,7 +15,8 @@ First, [install OPA](https://www.openpolicyagent.org/docs/latest/#running-opa)
 Then in the project root dir, run
 
 ```sh
-opa run -s .
+# Run in server mode, and watch local changes
+opa run -s -w .
 ```
 
 This will run an OPA server that uses data from `data.json` and policies in `main`.
@@ -81,7 +82,7 @@ jwt encode --alg PS512 --secret @rsa2048_private.pem "$(cat example/viewerall_jw
 
 ##### Workspace
 
-Tweak `data.json` to modify workspace definitions and restart the server (there's probably a way to do this using the API or bundle API)
+Tweak `data.json` to modify workspace definitions (if run with `-w`, the changes will auto-reload)
 
 Update `jwt_claims.json` to be
 
